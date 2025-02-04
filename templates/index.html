@@ -1,240 +1,77 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>YouTube Comment Spam Detector</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4 text-center">YouTube Comment Spam Detector</h1>
-        
-        <form id="spam-form" class="space-y-4">
-            <textarea 
-                id="comment-input" 
-                rows="4" 
-                class="w-full border rounded p-2" 
-                placeholder="Enter YouTube comment here..."
-            ></textarea>
-            
-            <button 
-                type="submit" 
-                class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-            >
-                Check for Spam
-            </button>
-        </form>
-
-        <div id="result" class="mt-4 text-center hidden">
-            <p id="result-message" class="font-bold"></p>
-            <p id="probability" class="text-sm text-gray-600"></p>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('spam-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const comment = document.getElementById('comment-input').value;
-            const resultDiv = document.getElementById('result');
-            const resultMessage = document.getElementById('result-message');
-            const probabilityText = document.getElementById('probability');
-
-            fetch('/predict', {
-                method: 'POST',
-                body: new FormData(e.target)
-            })
-            .then(response => response.json())
-            .then(data => {
-                resultDiv.classList.remove('hidden');
-                resultMessage.textContent = data.message;
-                probabilityText.textContent = `Spam Probability: ${(data.spam_probability * 100).toFixed(2)}%`;
-                
-                resultMessage.className = data.is_spam 
-                    ? 'text-red-600 font-bold' 
-                    : 'text-green-600 font-bold';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                resultDiv.classList.remove('hidden');
-                resultMessage.textContent = 'An error occurred';
-            });
-        });
-    </script>
-</body>
-</html> -->
-
-<!-- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>YouTube Comment Spam Detector</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e40af, #7e22ce);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            perspective: 1000px;
+        }
+        .card-container {
+            transition: all 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-container:hover {
+            transform: rotateY(10deg) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.5);
+            border-color: #a855f7;
+        }
+        @keyframes pulse-border {
+            0%, 100% { border-color: #a855f7; }
+            50% { border-color: #6366f1; }
+        }
+        .pulse-animation {
+            animation: pulse-border 2s infinite;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4 text-center">YouTube Comment Spam Detector</h1>
-        
-        <form id="spam-form" class="space-y-4">
-            <textarea 
-                id="comment-input" 
-                rows="4" 
-                class="w-full border rounded p-2" 
-                placeholder="Enter YouTube comment here..."
-            ></textarea>
-            
-            <button 
-                type="submit" 
-                class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-            >
-                Check for Spam
-            </button>
-        </form>
+<body class="bg-gradient-to-br from-blue-700 to-purple-600">
+    <div class="w-full max-w-md mx-auto card-container">
+        <div class="bg-white bg-opacity-95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 transform hover:scale-[1.02] hover:shadow-3xl">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-6 px-7 flex items-center space-x-4 rounded-t-3xl">
+                <div class="bg-white/20 p-3 rounded-full">
+                    <i class="fas fa-shield-alt text-3xl text-white/90"></i>
+                </div>
+                <h1 class="text-3xl font-black tracking-tight text-white/90">Spam Shield</h1>
+            </div>
 
-        <div id="result" class="mt-4 text-center hidden">
-            <p id="result-message" class="font-bold"></p>
-            <p id="probability" class="text-sm text-gray-600"></p>
-        </div>
-    </div>
+            <div class="p-7">
+                <form id="spam-form" class="space-y-5">
+                    <div class="relative group">
+                        <textarea 
+                            id="comment-input" 
+                            name="comment"
+                            rows="4" 
+                            class="w-full border-2 border-gray-300 rounded-xl p-4 focus:outline-none input-glow transition duration-300 resize-none text-gray-800 placeholder-gray-500 shadow-sm group-hover:border-purple-500" 
+                            placeholder="Paste a YouTube comment here..."></textarea>
+                        <i class="fas fa-comment-dots absolute right-5 top-5 text-gray-400 opacity-70 group-hover:opacity-100 transition-all"></i>
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-4 rounded-xl hover:opacity-90 transition duration-300 flex items-center justify-center space-x-3 group shadow-xl hover:shadow-2xl active:scale-[0.98]">
+                        <i class="fas fa-search text-lg group-hover:animate-pulse"></i>
+                        <span class="text-xl font-bold tracking-wide">Detect Spam</span>
+                    </button>
+                </form>
 
-    <script>
-        document.getElementById('spam-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const comment = document.getElementById('comment-input').value;
-            const resultDiv = document.getElementById('result');
-            const resultMessage = document.getElementById('result-message');
-            const probabilityText = document.getElementById('probability');
-
-            fetch('/predict', {
-                method: 'POST',
-                body: new FormData(e.target)
-            })
-            .then(response => response.json())
-            .then(data => {
-                resultDiv.classList.remove('hidden');
-                
-                // Mimic pred_class() function's output format
-                resultMessage.textContent = `"${comment}" ${data.message}`;
-                probabilityText.textContent = `Spam Probability: ${(data.spam_probability * 100).toFixed(2)}%`;
-                
-                resultMessage.className = data.is_spam 
-                    ? 'text-red-600 font-bold' 
-                    : 'text-green-600 font-bold';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                resultDiv.classList.remove('hidden');
-                resultMessage.textContent = 'An error occurred';
-            });
-        });
-    </script>
-</body>
-</html> -->
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>YouTube Comment Spam Detector</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4 text-center">YouTube Comment Spam Detector</h1>
-        
-        <form id="spam-form" class="space-y-4">
-            <textarea 
-                id="comment-input" 
-                rows="4" 
-                class="w-full border rounded p-2" 
-                placeholder="Enter YouTube comment here..."
-            ></textarea>
-            
-            <button 
-                type="submit" 
-                class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-            >
-                Check for Spam
-            </button>
-        </form>
-
-        <div id="result" class="mt-4 text-center hidden">
-            <p id="result-message" class="font-bold"></p>
-            <p id="probability" class="text-sm text-gray-600"></p>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('spam-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const comment = document.getElementById('comment-input').value;
-            const resultDiv = document.getElementById('result');
-            const resultMessage = document.getElementById('result-message');
-            const probabilityText = document.getElementById('probability');
-
-            fetch('/predict', {
-                method: 'POST',
-                body: new FormData(e.target)
-            })
-            .then(response => response.json())
-            .then(data => {
-                resultDiv.classList.remove('hidden');
-                
-                // Directly mimic pred_class() function's output format
-                resultMessage.textContent = data.is_spam 
-                    ? `"${comment}" IS A SPAM MESSAGE`
-                    : `"${comment}" is NOT A SPAM MESSAGE`;
-                
-                probabilityText.textContent = `Spam Probability: ${(data.spam_probability * 100).toFixed(2)}%`;
-                
-                resultMessage.className = data.is_spam 
-                    ? 'text-red-600 font-bold' 
-                    : 'text-green-600 font-bold';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                resultDiv.classList.remove('hidden');
-                resultMessage.textContent = 'An error occurred';
-                probabilityText.textContent = '';
-            });
-        });
-    </script>
-</body>
-</html> -->
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>YouTube Comment Spam Detector</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4 text-center">YouTube Comment Spam Detector</h1>
-        
-        <form id="spam-form" class="space-y-4">
-            <textarea 
-                id="comment-input" 
-                name="comment"
-                rows="4" 
-                class="w-full border rounded p-2" 
-                placeholder="Enter YouTube comment here..."
-            ></textarea>
-            
-            <button 
-                type="submit" 
-                class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
-            >
-                Check for Spam
-            </button>
-        </form>
-
-        <div id="result" class="mt-4 text-center hidden">
-            <p id="result-message" class="font-bold"></p>
-            <p id="probability" class="text-sm text-gray-600"></p>
+                <div id="result" class="mt-7 text-center hidden p-5 rounded-xl bg-gray-100/80 backdrop-blur-sm shadow-md transform transition-all duration-300">
+                    <div id="result-message" class="font-extrabold text-xl mb-3"></div>
+                    <div id="probability" class="text-md text-gray-600 font-medium"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -256,21 +93,18 @@
             .then(response => response.json())
             .then(data => {
                 resultDiv.classList.remove('hidden');
-                
-                // Directly mimic pred_class() function's output format
                 resultMessage.textContent = `"${comment}" ${data.message}`;
-                
                 probabilityText.textContent = `Spam Probability: ${(data.spam_probability * 100).toFixed(2)}%`;
-                
                 resultMessage.className = data.is_spam 
-                    ? 'text-red-600 font-bold' 
-                    : 'text-green-600 font-bold';
+                    ? 'text-red-600 font-bold animate-pulse' 
+                    : 'text-green-600 font-bold animate-bounce';
             })
             .catch(error => {
                 console.error('Error:', error);
                 resultDiv.classList.remove('hidden');
                 resultMessage.textContent = 'An error occurred';
                 probabilityText.textContent = '';
+                resultMessage.className = 'text-yellow-600 font-bold';
             });
         });
     </script>
